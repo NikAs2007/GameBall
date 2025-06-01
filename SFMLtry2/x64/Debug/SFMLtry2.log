@@ -1,0 +1,17 @@
+﻿  Player.cpp
+C:\Users\Admin\Desktop\Visual Studio 2022\Проекты\SFMLtry2\header.h(26,14): warning C4305: инициализация: усечение из "double" в "float"
+  (компиляция исходного файла "Player.cpp")
+  
+C:\Users\Admin\Desktop\Visual Studio 2022\Проекты\SFMLtry2\Player.cpp(14,35): warning C4244: аргумент: преобразование "const int" в "T", возможна потеря данных
+C:\Users\Admin\Desktop\Visual Studio 2022\Проекты\SFMLtry2\Player.cpp(14,35): warning C4244:         with
+C:\Users\Admin\Desktop\Visual Studio 2022\Проекты\SFMLtry2\Player.cpp(14,35): warning C4244:         [
+C:\Users\Admin\Desktop\Visual Studio 2022\Проекты\SFMLtry2\Player.cpp(14,35): warning C4244:             T=float
+C:\Users\Admin\Desktop\Visual Studio 2022\Проекты\SFMLtry2\Player.cpp(14,35): warning C4244:         ]
+C:\Users\Admin\Desktop\Visual Studio 2022\Проекты\SFMLtry2\Player.cpp(14,20): warning C4244: аргумент: преобразование "const int" в "T", возможна потеря данных
+C:\Users\Admin\Desktop\Visual Studio 2022\Проекты\SFMLtry2\Player.cpp(14,20): warning C4244:         with
+C:\Users\Admin\Desktop\Visual Studio 2022\Проекты\SFMLtry2\Player.cpp(14,20): warning C4244:         [
+C:\Users\Admin\Desktop\Visual Studio 2022\Проекты\SFMLtry2\Player.cpp(14,20): warning C4244:             T=float
+C:\Users\Admin\Desktop\Visual Studio 2022\Проекты\SFMLtry2\Player.cpp(14,20): warning C4244:         ]
+  SFMLtry2.vcxproj -> C:\Users\Admin\Desktop\Visual Studio 2022\Проекты\SFMLtry2\x64\Debug\SFMLtry2.exe
+  "pwsh.exe" не является внутренней или внешней
+  командой, исполняемой программой или пакетным файлом.

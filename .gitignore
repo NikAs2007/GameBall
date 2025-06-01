@@ -1,0 +1,13 @@
+bin/
+build/
+*.exe
+*.o
+*.out
+
+.vs/
+.idea/
+*.sln
+*.vcxproj
+*.user
+
+SFML/
