@@ -2,8 +2,8 @@
 
 const int sizeofscreenx = 1800;
 const int sizeofscreeny = 700;
-float k_size = 1;
-Vector2f corKam = Vector2f(sizeofscreenx, sizeofscreeny);
+//float k_size = 1;
+//Vector2f corKam = Vector2f(sizeofscreenx, sizeofscreeny);
 
 int main()
 {
@@ -15,8 +15,15 @@ int main()
 
     for (int i = 0; i < 5; ++i) enemy.push_back(Enemy(&player));
 
+    vector<Body*> bodies;
+    bodies.push_back(&player);
+    for (int i = 0; i < 5; ++i) bodies.push_back(&enemy[i]);
+
+
     settings.antialiasingLevel = 5;
     sf::RenderWindow window(sf::VideoMode(sizeofscreenx, sizeofscreeny), "Game Ball", sf::Style::Default, settings);
+
+    Camera cam(&window, &bodies);
 
     while (window.isOpen())
     {
@@ -32,36 +39,44 @@ int main()
             enemy[i].control();
         }
 
-        if (keyboard.isKeyPressed(Keyboard::F)) {
-            player.body_resize(0.001);
-            for (int i = 0; i < 5; ++i) {
-                enemy[i].body_resize(0.001);
-            }
-        }
-        if (keyboard.isKeyPressed(Keyboard::C)) {
-            player.body_resize(-0.001);
-            for (int i = 0; i < 5; ++i) {
-                enemy[i].body_resize(-0.001);
-            }
-        }
+
+        //Размер
+        //if (keyboard.isKeyPressed(Keyboard::F)) {
+        //    player.body_resize(0.001);
+        //    for (int i = 0; i < 5; ++i) {
+        //        enemy[i].body_resize(0.001);
+        //    }
+        //}
+        //if (keyboard.isKeyPressed(Keyboard::C)) {
+        //    player.body_resize(-0.001);
+        //    for (int i = 0; i < 5; ++i) {
+        //        enemy[i].body_resize(-0.001);
+        //    }
+        //}
+        //------------------------------------------------
+
+        cam.control();
         
         //Без эффектов
         //window.clear();
-        //
+        //------------------------------------------------
 
-        //Моушн блюр
-        RectangleShape forBlurClear;
-        forBlurClear.setSize(Vector2f(window.getSize()));
-        forBlurClear.setFillColor(Color(255, 255, 255, 20));
-        window.draw(forBlurClear);
-        //
+        ////Моушн блюр
+        //RectangleShape forBlurClear;
+        //forBlurClear.setSize(Vector2f(window.getSize()));
+        //forBlurClear.setFillColor(Color(255, 255, 255, 20));
+        //window.draw(forBlurClear);
+        ////-------------------------------------------------
 
-        window.draw(player.getBody());
-        for (int i = 0; i < 5; ++i) {
-            window.draw(enemy[i].getBody());
-        }
-        //window.draw(player.getDebug());
-        window.display();
+        //window.draw(player.getBody());
+        //for (int i = 0; i < 5; ++i) {
+        //    window.draw(enemy[i].getBody());
+        //}
+        ////window.draw(player.getDebug());
+        //window.display();
+
+        cam.draw_all();
+
     }
 
     return 0;

@@ -22,12 +22,6 @@ Player::Player(){
 
 }
 
-void Player::body_resize(float k) {
-	k_size += k;
-	//body.setPosition(body.getPosition().x / hiperbola(scroll), body.getPosition().y / hiperbola(scroll));
-	//body.setRadius(b)
-}
-
 Vector2f Player::calc_acs(Vector2f vec) {
 	return (power*vec - kfr*toOneVec(vel) - toOneVec(vel) * kai * mod(vel) * mod(vel)) / mass;
 }
@@ -53,21 +47,9 @@ void Player::control() {
 	cor.x = cor.x + vel.x;
 	cor.y = cor.y - vel.y;
 
-	if (keyboard.isKeyPressed(Keyboard::Up)) {
-		corKam.y += 10;
-	}
-	if (keyboard.isKeyPressed(Keyboard::Down)) {
-		corKam.y -= 10;
-	}
-	if (keyboard.isKeyPressed(Keyboard::Left)) {
-		corKam.x += 10;
-	}
-	if (keyboard.isKeyPressed(Keyboard::Right)) {
-		corKam.x -= 10;
-	}
-
-	body.setPosition((cor.x - corKam.x / 2) / k_size + corKam.x / 2, (cor.y - corKam.y / 2) / k_size + corKam.y / 2);
-	body.setRadius(rad / k_size);
+	//body.setPosition((cor.x - corKam.x / 2) / k_size + corKam.x / 2, (cor.y - corKam.y / 2) / k_size + corKam.y / 2);
+	//body.setRadius(rad / k_size);
+	
 	//if (toOneVec(vel).y != 0) body.setRotation(atanf(toOneVec(vel).x / toOneVec(vel).y)*180/M_PI);
 }
 
