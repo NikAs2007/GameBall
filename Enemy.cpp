@@ -10,18 +10,18 @@ Enemy::Enemy(Player* target) {
 	body.setOrigin(rad, rad);
 	vel = Vector2f(0, 0);
 	acs = Vector2f(0, 0);
-	cor = Vector2f(100, 100);
+	cor = Vector2f(rand() % sizeofscreenx, rand() % sizeofscreeny);
 	body.setPosition(cor.x, cor.y);
 	corKam = Vector2f(sizeofscreenx, sizeofscreeny);
 
 	this->target = target;
 }
 
-//void Player::body_resize(float k) {
-//	k_size += k;
-//	//body.setPosition(body.getPosition().x / hiperbola(scroll), body.getPosition().y / hiperbola(scroll));
-//	//body.setRadius(b)
-//}
+void Enemy::body_resize(float k) {
+	k_size += k;
+	//body.setPosition(body.getPosition().x / hiperbola(scroll), body.getPosition().y / hiperbola(scroll));
+	//body.setRadius(b)
+}
 
 Vector2f Enemy::calc_acs(Vector2f vec) {
 	return (power * vec - kfr * toOneVec(vel) - toOneVec(vel) * kai * mod(vel) * mod(vel)) / mass;
@@ -58,6 +58,8 @@ void Enemy::control() {
 			vel.x * sin_a + vel.y * cos_a
 		);
 	}
+
+	//vec = rotateVector(vec, rand() % 51 - 25);
 
 	acs = calc_acs(vec);
 	vel += acs;

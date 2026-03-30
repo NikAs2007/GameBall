@@ -5,17 +5,22 @@
 #include <iostream>
 #include <SFML/Graphics.hpp>
 #include <cmath>
+#include <random>
+#include <chrono>
 using namespace std;
 using namespace sf;
 
 extern Keyboard keyboard;
 extern const int sizeofscreenx;
 extern const int sizeofscreeny;
+extern float k_size;
+extern Vector2f corKam;
 
 int sign(float a);
 Vector2f toOneVec(Vector2f vec);
 float mod(Vector2f vec);
 float hiperbola(float x);
+Vector2f rotateVector(Vector2f vec, float angle);
 
 class Player {
 	CircleShape body;
@@ -27,9 +32,8 @@ class Player {
 	float kai = 1.5;
 	float rad = 10;
 
-	float k_size = 1;
 	Vector2f cor;
-	Vector2f corKam;
+	//Vector2f corKam;
 
 	Text dtext;
 	static Font font;
@@ -54,14 +58,13 @@ class Enemy {
 	float kai = 2;
 	float rad = 10;
 
-	float k_size = 1;
 	Vector2f cor;
-	Vector2f corKam;
+	//Vector2f corKam;
 
 	Player* target;
 public:
 	Enemy(Player* target);
-	//void body_resize(float k);
+	void body_resize(float k);
 	Vector2f calc_acs(Vector2f vec);
 	void control();
 	CircleShape getBody();

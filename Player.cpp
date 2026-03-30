@@ -12,7 +12,7 @@ Player::Player(){
 	acs = Vector2f(0, 0);
 	cor = Vector2f(300, 100);
 	body.setPosition(cor.x, cor.y);
-	corKam = Vector2f(sizeofscreenx, sizeofscreeny);
+	//corKam = Vector2f(sizeofscreenx, sizeofscreeny);
 
 	//if (!font.loadFromFile("ArialBlack.ttf")) cerr << "Font error!\n";
 	//dtext.setFont(font);

@@ -2,13 +2,18 @@
 
 const int sizeofscreenx = 1800;
 const int sizeofscreeny = 700;
+float k_size = 1;
+Vector2f corKam = Vector2f(sizeofscreenx, sizeofscreeny);
 
 int main()
 {
+    srand(static_cast<unsigned int>(chrono::system_clock::now().time_since_epoch().count()));
     sf::Clock clock;
     sf::ContextSettings settings;
     Player player;
-    Enemy enemy(&player);
+    vector<Enemy> enemy;
+
+    for (int i = 0; i < 5; ++i) enemy.push_back(Enemy(&player));
 
     settings.antialiasingLevel = 5;
     sf::RenderWindow window(sf::VideoMode(sizeofscreenx, sizeofscreeny), "Game Ball", sf::Style::Default, settings);
@@ -23,14 +28,28 @@ int main()
         }
         
         player.control();
-        enemy.control();
+        for (int i = 0; i < 5; ++i) {
+            enemy[i].control();
+        }
 
-        if (keyboard.isKeyPressed(Keyboard::F)) player.body_resize(0.001);
-        if (keyboard.isKeyPressed(Keyboard::C)) player.body_resize(-0.001);
+        if (keyboard.isKeyPressed(Keyboard::F)) {
+            player.body_resize(0.001);
+            for (int i = 0; i < 5; ++i) {
+                enemy[i].body_resize(0.001);
+            }
+        }
+        if (keyboard.isKeyPressed(Keyboard::C)) {
+            player.body_resize(-0.001);
+            for (int i = 0; i < 5; ++i) {
+                enemy[i].body_resize(-0.001);
+            }
+        }
         
         window.clear();
         window.draw(player.getBody());
-        window.draw(enemy.getBody());
+        for (int i = 0; i < 5; ++i) {
+            window.draw(enemy[i].getBody());
+        }
         //window.draw(player.getDebug());
         window.display();
     }
@@ -58,4 +77,20 @@ float mod(Vector2f vec) {
 float hiperbola(float x) {
     if (x <= 0.001) return 1000;
     return x;
+}
+
+Vector2f rotateVector(Vector2f vec, float ang) {
+    float angle = abs(ang) * M_PI / 180.0f;
+    float cos_a = std::cos(angle);
+    float sin_a = std::sin(angle);
+
+    if (ang < 0) {
+        sin_a = -sin_a;  // меняем знак синуса для поворота в другую сторону
+    }
+
+    Vector2f ans = Vector2f(
+        vec.x * cos_a - vec.y * sin_a,
+        vec.x * sin_a + vec.y * cos_a
+    );
+    return ans;
 }
