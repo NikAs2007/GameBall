@@ -30,10 +30,40 @@ class Player {
 	float k_size = 1;
 	Vector2f cor;
 	Vector2f corKam;
+
+	Text dtext;
+	static Font font;
+
+	friend class Enemy;
 public:
 	Player();
+	Text getDebug();
 	void body_resize(float k);
 	Vector2f calc_acs(Vector2f vec);
 	void control();
 	CircleShape getBody();
 };
+
+class Enemy {
+	CircleShape body;
+	Vector2f acs;
+	Vector2f vel;
+	float mass = 500;
+	float power = 3;
+	float kfr = 0.05;
+	float kai = 2;
+	float rad = 10;
+
+	float k_size = 1;
+	Vector2f cor;
+	Vector2f corKam;
+
+	Player* target;
+public:
+	Enemy(Player* target);
+	//void body_resize(float k);
+	Vector2f calc_acs(Vector2f vec);
+	void control();
+	CircleShape getBody();
+};
+

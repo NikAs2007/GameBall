@@ -8,9 +8,10 @@ int main()
     sf::Clock clock;
     sf::ContextSettings settings;
     Player player;
+    Enemy enemy(&player);
 
     settings.antialiasingLevel = 5;
-    sf::RenderWindow window(sf::VideoMode(sizeofscreenx, sizeofscreeny), "SFML test", sf::Style::Default, settings);
+    sf::RenderWindow window(sf::VideoMode(sizeofscreenx, sizeofscreeny), "Game Ball", sf::Style::Default, settings);
 
     while (window.isOpen())
     {
@@ -22,12 +23,15 @@ int main()
         }
         
         player.control();
+        enemy.control();
 
         if (keyboard.isKeyPressed(Keyboard::F)) player.body_resize(0.001);
         if (keyboard.isKeyPressed(Keyboard::C)) player.body_resize(-0.001);
         
         window.clear();
         window.draw(player.getBody());
+        window.draw(enemy.getBody());
+        //window.draw(player.getDebug());
         window.display();
     }
 

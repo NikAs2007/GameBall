@@ -1,13 +1,18 @@
 bin/
 build/
+x64/
+SFMLtry2/
+.vs/
 *.exe
 *.o
 *.out
+*.dll
 
 .vs/
 .idea/
 *.sln
 *.vcxproj
 *.user
+*.filters
 
 SFML/

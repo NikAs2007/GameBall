@@ -4,14 +4,22 @@
 
 Player::Player(){
 	body.setFillColor(Color::Green);
-	body.setPosition(100, 100);
 	body.setPointCount(16);
 	body.setRadius(10);
 	body.setRotation(0);
+	body.setOrigin(rad, rad);
 	vel = Vector2f(0, 0);
 	acs = Vector2f(0, 0);
-	cor = Vector2f(100, 100);
+	cor = Vector2f(300, 100);
+	body.setPosition(cor.x, cor.y);
 	corKam = Vector2f(sizeofscreenx, sizeofscreeny);
+
+	//if (!font.loadFromFile("ArialBlack.ttf")) cerr << "Font error!\n";
+	//dtext.setFont(font);
+	//dtext.setPosition(10, 10);
+	//dtext.setCharacterSize(10);
+	//dtext.setFillColor(Color(255, 255, 255));
+
 }
 
 void Player::body_resize(float k) {
@@ -65,4 +73,9 @@ void Player::control() {
 
 CircleShape Player::getBody() {
 	return body;
+}
+
+Text Player::getDebug() {
+	dtext.setString("Vel x: " + to_string(vel.x) + "\nVel y: " + to_string(vel.y));
+	return dtext;
 }
