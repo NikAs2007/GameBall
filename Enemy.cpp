@@ -3,13 +3,32 @@
 //Keyboard keyboard;
 
 Enemy::Enemy(Player* target) {
-	body.setFillColor(Color::Blue);
+
+	//
+	rad = rand() % 5 + 9;
+
+	body.setFillColor(Color(rand() % 150, rand() % 150, rand() % 150));
 	body.setPointCount(3);
 	body.setRadius(rad);
 	body.setRotation(0);
-	body.setOrigin(rad, rad);
-	vel = Vector2f(0, 0);
+	body.setOrigin(rad/2, rad/2);
+	vel = Vector2f(rand()%2, rand()%2);
 	acs = Vector2f(0, 0);
+
+	mass = rand() % 150 + 400;
+	power = (float)(rand() % 5) / 10 + 2.5;
+	kfr = (float)(rand() % 6) / 100 + 0.3;
+	kai = (float)(rand() % 16) / 100 + 1.4;
+
+	//
+	//body.setFillColor(Color::Blue);
+	//body.setPointCount(3);
+	//body.setRadius(rad);
+	//body.setRotation(0);
+	//body.setOrigin(rad, rad);
+	//vel = Vector2f(0, 0);
+	//acs = Vector2f(0, 0);
+	//
 	cor = Vector2f(rand() % sizeofscreenx, rand() % sizeofscreeny);
 	body.setPosition(cor.x, cor.y);
 	corKam = Vector2f(sizeofscreenx, sizeofscreeny);

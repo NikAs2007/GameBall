@@ -7,10 +7,10 @@ Player::Player(){
 	body.setPointCount(16);
 	body.setRadius(10);
 	body.setRotation(0);
-	body.setOrigin(rad, rad);
+	body.setOrigin(rad/2, rad/2);
 	vel = Vector2f(0, 0);
 	acs = Vector2f(0, 0);
-	cor = Vector2f(300, 100);
+	cor = Vector2f(sizeofscreenx/2, sizeofscreeny / 2);
 	body.setPosition(cor.x, cor.y);
 	//corKam = Vector2f(sizeofscreenx, sizeofscreeny);
 

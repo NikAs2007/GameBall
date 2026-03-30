@@ -45,7 +45,17 @@ int main()
             }
         }
         
-        window.clear();
+        //Без эффектов
+        //window.clear();
+        //
+
+        //Моушн блюр
+        RectangleShape forBlurClear;
+        forBlurClear.setSize(Vector2f(window.getSize()));
+        forBlurClear.setFillColor(Color(255, 255, 255, 20));
+        window.draw(forBlurClear);
+        //
+
         window.draw(player.getBody());
         for (int i = 0; i < 5; ++i) {
             window.draw(enemy[i].getBody());
