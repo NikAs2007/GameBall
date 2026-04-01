@@ -16,17 +16,18 @@ void Camera::control() {
 	}
 
 	if (keyboard.isKeyPressed(Keyboard::Up)) {
-		corKam.y += 10;
+		corKam.y -= 3 * k_size;
 	}
 	if (keyboard.isKeyPressed(Keyboard::Down)) {
-		corKam.y -= 10;
+		corKam.y += 3 * k_size;
 	}
 	if (keyboard.isKeyPressed(Keyboard::Left)) {
-		corKam.x += 10;
+		corKam.x -= 3 * k_size;
 	}
 	if (keyboard.isKeyPressed(Keyboard::Right)) {
-		corKam.x -= 10;
+		corKam.x += 3 * k_size;
 	}
+
 
 	//if (event.type == sf::Event::KeyPressed) {
 	//	if (event.key.code == sf::Keyboard::R) {
@@ -64,11 +65,13 @@ void Camera::draw_all() {
 		//window->clear(Color(255, 0, 0));
 	}
 	for (int i = 0; i < bodies->size(); ++i) {
-		(*bodies)[i]->body.setPosition(((*bodies)[i]->cor.x - corKam.x / 2) / k_size + corKam.x / 2, ((*bodies)[i]->cor.y - corKam.y / 2) / k_size + corKam.y / 2);
+		(*bodies)[i]->body.setPosition(((*bodies)[i]->cor.x - corKam.x) / k_size + (float)sizeofscreenx/2, ((*bodies)[i]->cor.y - corKam.y) / k_size + (float)sizeofscreeny/2);
 		(*bodies)[i]->body.setRadius((*bodies)[i]->rad / k_size);
+		(*bodies)[i]->body.setOrigin((*bodies)[i]->rad / k_size, (*bodies)[i]->rad / k_size);
 
-		blinks.setUniform("cenx", (*bodies)[i]->body.getPosition().x + (*bodies)[i]->rad/2);
-		blinks.setUniform("ceny", sizeofscreeny - (*bodies)[i]->body.getPosition().y - (*bodies)[i]->rad/2);
+		blinks.setUniform("cenx", (*bodies)[i]->body.getPosition().x);
+		blinks.setUniform("ceny", sizeofscreeny - (*bodies)[i]->body.getPosition().y);
+		blinks.setUniform("zoom", k_size);
 
 		Player* isPlayer = dynamic_cast<Player*>((*bodies)[i]);
 		if (isPlayer) {

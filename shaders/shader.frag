@@ -2,6 +2,7 @@
 
 uniform float cenx;
 uniform float ceny;
+uniform float zoom;
 
 void main() {
 
@@ -13,11 +14,11 @@ void main() {
     vec3 color = vec3(1.0,1.0,0.5);
     dist = 10.0/dist;
     float alpha = 1.0;
-    color *= dist;
-    alpha *= dist;
+    color *= dist/zoom;
+    alpha *= dist/zoom;
     if (dist <= 1.0){
-        color *= dist;
-        alpha *= dist;
+        color *= dist/zoom;
+        alpha *= dist/zoom;
     }
 
     gl_FragColor = vec4(color,alpha);

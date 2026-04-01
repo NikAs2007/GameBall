@@ -11,7 +11,7 @@ Enemy::Enemy(Player* target) {
 	body.setPointCount(3);
 	body.setRadius(rad);
 	body.setRotation(0);
-	body.setOrigin(rad/2, rad/2);
+	body.setOrigin(rad, rad);
 	vel = Vector2f(rand()%2, rand()%2);
 	acs = Vector2f(0, 0);
 
@@ -29,7 +29,7 @@ Enemy::Enemy(Player* target) {
 	//vel = Vector2f(0, 0);
 	//acs = Vector2f(0, 0);
 	//
-	cor = Vector2f(rand() % sizeofscreenx, rand() % sizeofscreeny);
+	cor = Vector2f(rand() % sizeofscreenx - sizeofscreenx/2, rand() % sizeofscreeny - sizeofscreeny / 2);
 	body.setPosition(cor.x, cor.y);
 	//corKam = Vector2f(sizeofscreenx, sizeofscreeny);
 

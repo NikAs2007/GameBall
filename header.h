@@ -84,7 +84,7 @@ class Camera {
 	vector<Body*>* bodies;
 	RenderWindow* window;
 	float k_size = 1;
-	Vector2f corKam = Vector2f(sizeofscreenx, sizeofscreeny);
+	Vector2f corKam = Vector2f(0, 0);
 	bool moutionblur = false;
 
 	Shader blinks;
