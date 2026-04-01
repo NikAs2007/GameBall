@@ -32,6 +32,7 @@ int main()
         {
             if (event.type == sf::Event::Closed)
                 window.close();
+
         }
         
         player.control();
@@ -55,7 +56,6 @@ int main()
         //}
         //------------------------------------------------
 
-        cam.control();
         
         //Без эффектов
         //window.clear();
@@ -74,7 +74,7 @@ int main()
         //}
         ////window.draw(player.getDebug());
         //window.display();
-
+        cam.control();
         cam.draw_all();
 
     }

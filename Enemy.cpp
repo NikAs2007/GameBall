@@ -7,7 +7,7 @@ Enemy::Enemy(Player* target) {
 	//
 	rad = rand() % 5 + 9;
 
-	body.setFillColor(Color(rand() % 150, rand() % 150, rand() % 150));
+	body.setFillColor(Color(rand() % 150 + 50, rand() % 150 + 50, rand() % 150 + 50));
 	body.setPointCount(3);
 	body.setRadius(rad);
 	body.setRotation(0);

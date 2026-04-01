@@ -3,9 +3,10 @@
 //Keyboard keyboard;
 
 Player::Player(){
+	rad = 20;
 	body.setFillColor(Color::Green);
 	body.setPointCount(16);
-	body.setRadius(10);
+	body.setRadius(rad);
 	body.setRotation(0);
 	body.setOrigin(rad/2, rad/2);
 	vel = Vector2f(0, 0);

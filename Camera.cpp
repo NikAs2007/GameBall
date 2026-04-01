@@ -3,6 +3,7 @@
 Camera::Camera(RenderWindow* window, vector<Body*>* bodies) {
 	this->window = window;
 	this->bodies = bodies;
+	blinks.loadFromFile("shaders/shader.frag", Shader::Fragment);
 }
 
 void Camera::control() {
@@ -11,6 +12,7 @@ void Camera::control() {
 	}
 	if (keyboard.isKeyPressed(Keyboard::C)) {
 		k_size -= 0.01;
+		if (k_size <= 0) k_size = 0.01;
 	}
 
 	if (keyboard.isKeyPressed(Keyboard::Up)) {
@@ -25,14 +27,56 @@ void Camera::control() {
 	if (keyboard.isKeyPressed(Keyboard::Right)) {
 		corKam.x -= 10;
 	}
+
+	//if (event.type == sf::Event::KeyPressed) {
+	//	if (event.key.code == sf::Keyboard::R) {
+	//		moutionblur = !moutionblur;
+	//	}
+	//}
+	
+
+	// Для R используем отдельный флаг
+	static bool r_was_pressed = false;
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::R)) {
+		if (!r_was_pressed) {
+			r_was_pressed = true;
+			moutionblur = !moutionblur;
+			std::cout << "Motion blur: " << (moutionblur ? "ON" : "OFF") << std::endl;
+		}
+	}
+	else {
+		r_was_pressed = false;
+	}
+
 }
 
 void Camera::draw_all() {
-	window->clear(Color(0, 0, 0));
+	if (!moutionblur) {
+		float time_ = clock.getElapsedTime().asSeconds();
+
+		window->clear(Color(0, 0, 0));
+	}
+	else {
+		RectangleShape forBlurClear;
+		forBlurClear.setSize(Vector2f(window->getSize()));
+		forBlurClear.setFillColor(Color(255, 255, 255, 20));
+		window->draw(forBlurClear);
+		//window->clear(Color(255, 0, 0));
+	}
 	for (int i = 0; i < bodies->size(); ++i) {
 		(*bodies)[i]->body.setPosition(((*bodies)[i]->cor.x - corKam.x / 2) / k_size + corKam.x / 2, ((*bodies)[i]->cor.y - corKam.y / 2) / k_size + corKam.y / 2);
 		(*bodies)[i]->body.setRadius((*bodies)[i]->rad / k_size);
-		window->draw((*bodies)[i]->body);
+
+		blinks.setUniform("cenx", (*bodies)[i]->body.getPosition().x + (*bodies)[i]->rad/2);
+		blinks.setUniform("ceny", sizeofscreeny - (*bodies)[i]->body.getPosition().y - (*bodies)[i]->rad/2);
+
+		Player* isPlayer = dynamic_cast<Player*>((*bodies)[i]);
+		if (isPlayer) {
+			window->draw((*bodies)[i]->body, &blinks);
+		}
+		else {
+			window->draw((*bodies)[i]->body);
+		}
 	}
 	window->display();
 }

@@ -31,6 +31,7 @@ struct Body {
 	//CircleShape& getBody() {
 	//	return body;
 	//}
+	virtual void polimorphicCl() {};
 };
 
 class Player : public Body{
@@ -41,7 +42,7 @@ class Player : public Body{
 	float power = 2;
 	float kfr = 0.3;
 	float kai = 1.5;
-	float rad = 10;
+	//float rad = 100;
 
 	//Vector2f cor;
 	//Vector2f corKam;
@@ -84,7 +85,10 @@ class Camera {
 	RenderWindow* window;
 	float k_size = 1;
 	Vector2f corKam = Vector2f(sizeofscreenx, sizeofscreeny);
+	bool moutionblur = false;
 
+	Shader blinks;
+	Clock clock;
 
 public:
 	Camera(RenderWindow* window, vector<Body*>* bodies);
