@@ -3,7 +3,12 @@
 Camera::Camera(RenderWindow* window, vector<Body*>* bodies) {
 	this->window = window;
 	this->bodies = bodies;
+
+	rendTexture.create(sizeofscreenx, sizeofscreeny);
+	picture.setTexture(rendTexture.getTexture());
+
 	blinks.loadFromFile("shaders/shader.frag", Shader::Fragment);
+	screen_sh.loadFromFile("shaders/screen_shader.frag", Shader::Fragment);
 }
 
 void Camera::control() {
@@ -56,6 +61,7 @@ void Camera::draw_all() {
 		float time_ = clock.getElapsedTime().asSeconds();
 
 		window->clear(Color(0, 0, 0));
+		rendTexture.clear();
 	}
 	else {
 		RectangleShape forBlurClear;
@@ -75,11 +81,18 @@ void Camera::draw_all() {
 
 		Player* isPlayer = dynamic_cast<Player*>((*bodies)[i]);
 		if (isPlayer) {
-			window->draw((*bodies)[i]->body, &blinks);
+			rendTexture.draw((*bodies)[i]->body, &blinks);
+			//window->draw((*bodies)[i]->body, &blinks);
 		}
 		else {
-			window->draw((*bodies)[i]->body);
+			rendTexture.draw((*bodies)[i]->body);
+			//window->draw((*bodies)[i]->body);
 		}
 	}
+	rendTexture.display();
+	screen_sh.setUniform("u_texture",rendTexture.getTexture());
+	screen_sh.setUniform("strength", 0.002f);
+	screen_sh.setUniform("zoom", k_size);
+	window->draw(picture, &screen_sh);
 	window->display();
 }

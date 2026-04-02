@@ -88,7 +88,11 @@ class Camera {
 	bool moutionblur = false;
 
 	Shader blinks;
+	Shader screen_sh;
 	Clock clock;
+
+	RenderTexture rendTexture;
+	Sprite picture;
 
 public:
 	Camera(RenderWindow* window, vector<Body*>* bodies);
