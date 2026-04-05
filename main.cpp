@@ -13,17 +13,19 @@ int main()
     Player player;
     vector<Enemy> enemy;
 
-    for (int i = 0; i < 5; ++i) enemy.push_back(Enemy(&player));
+    for (int i = 0; i < 50; ++i) enemy.push_back(Enemy(&player));
 
     vector<Body*> bodies;
     bodies.push_back(&player);
-    for (int i = 0; i < 5; ++i) bodies.push_back(&enemy[i]);
+    for (int i = 0; i < 50; ++i) bodies.push_back(&enemy[i]);
 
 
     settings.antialiasingLevel = 5;
     sf::RenderWindow window(sf::VideoMode(sizeofscreenx, sizeofscreeny), "Game Ball", sf::Style::Default, settings);
-
-    Camera cam(&window, &bodies);
+    Menu menu;
+    Camera cam(&window, &bodies, &menu);
+    bool fl = false;
+    bool fl_pause = false;
 
     while (window.isOpen())
     {
@@ -34,46 +36,56 @@ int main()
                 window.close();
 
         }
-        
-        player.control();
-        for (int i = 0; i < 5; ++i) {
-            enemy[i].control();
+
+
+
+        //if (menu.stage != menu.MENU) {
+        //    if (fl_pause) {
+        //        if (!keyboard.isKeyPressed(keyboard.P)) {
+        //            fl_pause = false;
+        //        }
+
+
+        //    }
+        //    else {
+        //        if (keyboard.isKeyPressed(keyboard.P)) {
+        //            if (menu.stage == menu.PLAY) menu.stage = menu.PAUSE;
+        //            else if (menu.stage == menu.PAUSE) menu.stage = menu.PLAY;
+        //            fl = true;
+        //        }
+        //    }
+        //}
+
+
+        if (menu.stage == menu.PLAY) {
+            player.control();
+            for (int i = 0; i < enemy.size(); ++i) {
+                enemy[i].control();
+            }
+        }
+        else if (menu.stage == menu.MENU) {
+            for (int i = 0; i < menu.buttons.size(); ++i) {
+                menu.buttons[i].isHover(window);
+                if (fl) {
+                    if (!menu.buttons[i].isHover(window) && !mouse.isButtonPressed(mouse.Left)) {
+                        fl = false;
+                    }
+                    else if (!mouse.isButtonPressed(mouse.Left) && menu.buttons[i].isHover(window)) {
+                        menu.stage = menu.PLAY;
+                        fl = false;
+                    }
+
+                }
+                else {
+                    if (mouse.isButtonPressed(mouse.Left) && menu.buttons[i].isHover(window)) {
+                        fl = true;
+                    }
+                }
+                
+            }
         }
 
 
-        //Размер
-        //if (keyboard.isKeyPressed(Keyboard::F)) {
-        //    player.body_resize(0.001);
-        //    for (int i = 0; i < 5; ++i) {
-        //        enemy[i].body_resize(0.001);
-        //    }
-        //}
-        //if (keyboard.isKeyPressed(Keyboard::C)) {
-        //    player.body_resize(-0.001);
-        //    for (int i = 0; i < 5; ++i) {
-        //        enemy[i].body_resize(-0.001);
-        //    }
-        //}
-        //------------------------------------------------
-
-        
-        //Без эффектов
-        //window.clear();
-        //------------------------------------------------
-
-        ////Моушн блюр
-        //RectangleShape forBlurClear;
-        //forBlurClear.setSize(Vector2f(window.getSize()));
-        //forBlurClear.setFillColor(Color(255, 255, 255, 20));
-        //window.draw(forBlurClear);
-        ////-------------------------------------------------
-
-        //window.draw(player.getBody());
-        //for (int i = 0; i < 5; ++i) {
-        //    window.draw(enemy[i].getBody());
-        //}
-        ////window.draw(player.getDebug());
-        //window.display();
         cam.control();
         cam.draw_all();
 

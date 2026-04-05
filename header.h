@@ -11,6 +11,7 @@ using namespace std;
 using namespace sf;
 
 extern Keyboard keyboard;
+extern Mouse mouse;
 extern const int sizeofscreenx;
 extern const int sizeofscreeny;
 //extern float k_size;
@@ -42,10 +43,6 @@ class Player : public Body{
 	float power = 2;
 	float kfr = 0.3;
 	float kai = 1.5;
-	//float rad = 100;
-
-	//Vector2f cor;
-	//Vector2f corKam;
 
 	Text dtext;
 	static Font font;
@@ -61,16 +58,12 @@ public:
 };
 
 class Enemy : public Body {
-	//CircleShape body;
 	Vector2f acs;
 	Vector2f vel;
 	float mass = 500;
 	float power = 3;
 	float kfr = 0.05;
 	float kai = 2;
-	//float rad = 10;
-
-	//Vector2f cor;
 
 	Player* target;
 public:
@@ -80,12 +73,49 @@ public:
 	CircleShape getBody();
 };
 
+class Button : public Body {
+
+public:
+	bool isHover(RenderWindow& window) {
+		if (mod(Vector2f(mouse.getPosition(window)) - body.getPosition()) <= rad) {
+			rad = 55;
+			body.setRadius(rad);
+			body.setFillColor(Color(200,245,255));
+			return true;
+		}
+		rad = 50;
+		body.setRadius(rad);
+		body.setFillColor(Color(255,255,255));
+		return false;
+	}
+
+	Button() {
+		rad = 50;
+		cor = Vector2f(0, 0);
+		body.setFillColor(Color(255, 255, 255, 255));
+		body.setOrigin(rad, rad);
+		body.setPointCount(64);
+		body.setRadius(rad);
+	}
+};
+
+class Menu {
+
+public:
+	vector<Button> buttons;
+	enum Stage { MENU, PAUSE, PLAY };
+	Stage stage = MENU;
+
+	Menu();
+	
+};
+
 class Camera {
 	vector<Body*>* bodies;
+	Menu* menu;
 	RenderWindow* window;
 	float k_size = 1;
 	Vector2f corKam = Vector2f(0, 0);
-	bool moutionblur = false;
 
 	Shader blinks;
 	Shader screen_sh;
@@ -95,7 +125,7 @@ class Camera {
 	Sprite picture;
 
 public:
-	Camera(RenderWindow* window, vector<Body*>* bodies);
+	Camera(RenderWindow* window, vector<Body*>* bodies, Menu* menu);
 	void control();
 	void draw_all();
 };

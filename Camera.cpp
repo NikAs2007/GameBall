@@ -1,8 +1,9 @@
 #include "header.h"
 
-Camera::Camera(RenderWindow* window, vector<Body*>* bodies) {
+Camera::Camera(RenderWindow* window, vector<Body*>* bodies, Menu* menu) {
 	this->window = window;
 	this->bodies = bodies;
+	this->menu = menu;
 
 	rendTexture.create(sizeofscreenx, sizeofscreeny);
 	picture.setTexture(rendTexture.getTexture());
@@ -32,13 +33,6 @@ void Camera::control() {
 	if (keyboard.isKeyPressed(Keyboard::Right)) {
 		corKam.x += 3 * k_size;
 	}
-
-
-	//if (event.type == sf::Event::KeyPressed) {
-	//	if (event.key.code == sf::Keyboard::R) {
-	//		moutionblur = !moutionblur;
-	//	}
-	//}
 	
 
 	// Для R используем отдельный флаг
@@ -46,8 +40,8 @@ void Camera::control() {
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::R)) {
 		if (!r_was_pressed) {
 			r_was_pressed = true;
-			moutionblur = !moutionblur;
-			std::cout << "Motion blur: " << (moutionblur ? "ON" : "OFF") << std::endl;
+			//moutionblur = !moutionblur;
+			//std::cout << "Motion blur: " << (moutionblur ? "ON" : "OFF") << std::endl;
 		}
 	}
 	else {
@@ -57,38 +51,41 @@ void Camera::control() {
 }
 
 void Camera::draw_all() {
-	if (!moutionblur) {
-		float time_ = clock.getElapsedTime().asSeconds();
+	//float time_ = clock.getElapsedTime().asSeconds();
+	window->clear(Color(0, 0, 0));
+	rendTexture.clear();
 
-		window->clear(Color(0, 0, 0));
-		rendTexture.clear();
+	if (menu->stage == menu->PLAY || menu->stage == menu->PAUSE) {
+		//Рисуем тела
+		for (int i = 0; i < bodies->size(); ++i) {
+			(*bodies)[i]->body.setPosition(((*bodies)[i]->cor.x - corKam.x) / k_size + (float)sizeofscreenx / 2, ((*bodies)[i]->cor.y - corKam.y) / k_size + (float)sizeofscreeny / 2);
+			(*bodies)[i]->body.setRadius((*bodies)[i]->rad / k_size);
+			(*bodies)[i]->body.setOrigin((*bodies)[i]->rad / k_size, (*bodies)[i]->rad / k_size);
+
+			blinks.setUniform("cenx", (*bodies)[i]->body.getPosition().x);
+			blinks.setUniform("ceny", sizeofscreeny - (*bodies)[i]->body.getPosition().y);
+			blinks.setUniform("zoom", k_size);
+
+			Player* isPlayer = dynamic_cast<Player*>((*bodies)[i]);
+			if (isPlayer) {
+				rendTexture.draw((*bodies)[i]->body, &blinks);
+				//window->draw((*bodies)[i]->body, &blinks);
+			}
+			else {
+				rendTexture.draw((*bodies)[i]->body);
+				//window->draw((*bodies)[i]->body);
+			}
+		}
 	}
 	else {
-		RectangleShape forBlurClear;
-		forBlurClear.setSize(Vector2f(window->getSize()));
-		forBlurClear.setFillColor(Color(255, 255, 255, 20));
-		window->draw(forBlurClear);
-		//window->clear(Color(255, 0, 0));
+		menu->buttons[0].body.setPosition((menu->buttons[0].cor.x - corKam.x) / k_size + (float)sizeofscreenx / 2, (menu->buttons[0].cor.y - corKam.y) / k_size + (float)sizeofscreeny / 2);
+		menu->buttons[0].body.setRadius(menu->buttons[0].rad / k_size);
+		menu->buttons[0].body.setOrigin(menu->buttons[0].rad / k_size, menu->buttons[0].rad / k_size);
+		rendTexture.draw(menu->buttons[0].body);
 	}
-	for (int i = 0; i < bodies->size(); ++i) {
-		(*bodies)[i]->body.setPosition(((*bodies)[i]->cor.x - corKam.x) / k_size + (float)sizeofscreenx/2, ((*bodies)[i]->cor.y - corKam.y) / k_size + (float)sizeofscreeny/2);
-		(*bodies)[i]->body.setRadius((*bodies)[i]->rad / k_size);
-		(*bodies)[i]->body.setOrigin((*bodies)[i]->rad / k_size, (*bodies)[i]->rad / k_size);
 
-		blinks.setUniform("cenx", (*bodies)[i]->body.getPosition().x);
-		blinks.setUniform("ceny", sizeofscreeny - (*bodies)[i]->body.getPosition().y);
-		blinks.setUniform("zoom", k_size);
 
-		Player* isPlayer = dynamic_cast<Player*>((*bodies)[i]);
-		if (isPlayer) {
-			rendTexture.draw((*bodies)[i]->body, &blinks);
-			//window->draw((*bodies)[i]->body, &blinks);
-		}
-		else {
-			rendTexture.draw((*bodies)[i]->body);
-			//window->draw((*bodies)[i]->body);
-		}
-	}
+
 	rendTexture.display();
 	screen_sh.setUniform("u_texture",rendTexture.getTexture());
 	screen_sh.setUniform("strength", 0.002f);
