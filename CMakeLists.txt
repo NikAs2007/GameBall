@@ -1,12 +1,19 @@
-cmake_minimum_required(VERSION 3.30)
+cmake_minimum_required(VERSION 3.2)
 project(GameBall)
 
-set(SFML_DIR "D:/SFML/SFML-2.6.2/lib/cmake/SFML")
+set(SN "${PROJECT_NAME}server")
+set(CN "${PROJECT_NAME}client")
 
+set(SFML_DIR "D:/SFML/SFML-2.6.2/lib/cmake/SFML")
 find_package(SFML 2.6.2 COMPONENTS graphics window system REQUIRED)
 
-add_executable(${PROJECT_NAME} main.cpp Enemy.cpp Player.cpp Camera.cpp)
 
-set_target_properties(${PROJECT_NAME} PROPERTIES LINK_FLAGS "/SUBSYSTEM:WINDOWS /ENTRY:mainCRTStartup")
+add_executable(${SN} server/main.cpp GameBallLib/Enemy.cpp GameBallLib/Player.cpp GameBallLib/Camera.cpp GameBallLib/Menu.cpp)
+set_target_properties(${SN} PROPERTIES LINK_FLAGS "/SUBSYSTEM:WINDOWS /ENTRY:mainCRTStartup")
+target_link_libraries(${SN} PRIVATE sfml-graphics sfml-window sfml-system)
+target_include_directories(${SN} PRIVATE asio-1.36.0/include)
 
-target_link_libraries(${PROJECT_NAME} PRIVATE sfml-graphics sfml-window sfml-system)
+add_executable(${CN} client/main.cpp GameBallLib/Enemy.cpp GameBallLib/Player.cpp GameBallLib/Camera.cpp GameBallLib/Menu.cpp)
+set_target_properties(${CN} PROPERTIES LINK_FLAGS "/SUBSYSTEM:WINDOWS /ENTRY:mainCRTStartup")
+target_link_libraries(${CN} PRIVATE sfml-graphics sfml-window sfml-system)
+target_include_directories(${CN} PRIVATE asio-1.36.0/include)

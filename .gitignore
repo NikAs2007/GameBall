@@ -2,6 +2,7 @@ bin/
 build/
 x64/
 SFMLtry2/
+out/
 .vs/
 *.exe
 *.o
