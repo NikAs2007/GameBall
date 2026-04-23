@@ -10,6 +10,7 @@ find_package(SFML 2.6.2 COMPONENTS graphics window system REQUIRED)
 
 add_executable(${SN} server/main.cpp GameBallLib/Enemy.cpp GameBallLib/Player.cpp GameBallLib/Camera.cpp GameBallLib/Menu.cpp)
 set_target_properties(${SN} PROPERTIES LINK_FLAGS "/SUBSYSTEM:WINDOWS /ENTRY:mainCRTStartup")
+#set_target_properties(${SN} PROPERTIES LINK_FLAGS "/SUBSYSTEM:CONSOLE")
 target_link_libraries(${SN} PRIVATE sfml-graphics sfml-window sfml-system)
 target_include_directories(${SN} PRIVATE asio-1.36.0/include)
 

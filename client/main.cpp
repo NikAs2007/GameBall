@@ -1,14 +1,28 @@
 //client
 
 #include "../GameBallLib/header.h"
+#include <array>
 
 const int sizeofscreenx = 1800;
 const int sizeofscreeny = 700;
-//float k_size = 1;
-//Vector2f corKam = Vector2f(sizeofscreenx, sizeofscreeny);
+
+#pragma pack(push, 1)
+struct StatePacket {
+    float px, py;
+    array<float, 50 * 2> cords;
+};
+#pragma pack(pop)
 
 int main()
 {
+    //----------------------------------------------
+    asio::io_context io;
+    asio::ip::udp::socket socket(io, asio::ip::udp::endpoint(asio::ip::udp::v4(), 0)); // любой свободный порт
+    asio::ip::udp::endpoint server(asio::ip::make_address("127.0.0.1"), 56782);
+    // Отправляем приветствие для регистрации
+    socket.send_to(asio::buffer("H", 1), server);
+    //----------------------------------------------
+
     srand(static_cast<unsigned int>(chrono::system_clock::now().time_since_epoch().count()));
     sf::Clock clock;
     sf::ContextSettings settings;
@@ -29,6 +43,8 @@ int main()
     bool fl = false;
     bool fl_pause = false;
 
+    StatePacket pck;
+
     while (window.isOpen())
     {
         sf::Event event;
@@ -38,6 +54,21 @@ int main()
                 window.close();
 
         }
+
+        socket.non_blocking(true);
+        asio::ip::udp::endpoint sender;
+        asio::error_code ec;
+        size_t len = socket.receive_from(asio::buffer(&pck, sizeof(pck)), sender, 0, ec);
+        if (!ec && len == sizeof(pck)) {
+            // Обновляем позиции
+            bodies[0]->cor.x = pck.px;
+            bodies[0]->cor.y = pck.py;
+            for (int i = 1; i < 51; ++i) {
+                bodies[i]->cor.x = pck.cords[i * 2 - 2];
+                bodies[i]->cor.y = pck.cords[i * 2 - 1];
+            }
+        }
+
 
 
 
@@ -59,35 +90,35 @@ int main()
         //}
 
 
-        if (menu.stage == menu.PLAY) {
-            player.control();
-            for (int i = 0; i < enemy.size(); ++i) {
-                enemy[i].control();
-            }
-        }
-        else if (menu.stage == menu.MENU) {
-            for (int i = 0; i < menu.buttons.size(); ++i) {
-                menu.buttons[i].isHover(window);
-                if (fl) {
-                    if (!menu.buttons[i].isHover(window) && !mouse.isButtonPressed(mouse.Left)) {
-                        fl = false;
-                    }
-                    else if (!mouse.isButtonPressed(mouse.Left) && menu.buttons[i].isHover(window)) {
-                        menu.stage = menu.PLAY;
-                        fl = false;
-                    }
+        //if (menu.stage == menu.PLAY) {
+        //    player.control();
+        //    for (int i = 0; i < enemy.size(); ++i) {
+        //        enemy[i].control();
+        //    }
+        //}
+        //else if (menu.stage == menu.MENU) {
+        //    for (int i = 0; i < menu.buttons.size(); ++i) {
+        //        menu.buttons[i].isHover(window);
+        //        if (fl) {
+        //            if (!menu.buttons[i].isHover(window) && !mouse.isButtonPressed(mouse.Left)) {
+        //                fl = false;
+        //            }
+        //            else if (!mouse.isButtonPressed(mouse.Left) && menu.buttons[i].isHover(window)) {
+        //                menu.stage = menu.PLAY;
+        //                fl = false;
+        //            }
 
-                }
-                else {
-                    if (mouse.isButtonPressed(mouse.Left) && menu.buttons[i].isHover(window)) {
-                        fl = true;
-                    }
-                }
+        //        }
+        //        else {
+        //            if (mouse.isButtonPressed(mouse.Left) && menu.buttons[i].isHover(window)) {
+        //                fl = true;
+        //            }
+        //        }
 
-            }
-        }
+        //    }
+        //}
 
-
+        menu.stage = menu.PLAY;
         cam.control();
         cam.draw_all();
 

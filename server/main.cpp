@@ -1,13 +1,29 @@
 //server
 
 #include "../GameBallLib/header.h"
+#include <array>
 
 
 const int sizeofscreenx = 1800;
 const int sizeofscreeny = 700;
 
+#pragma pack(push, 1)
+struct StatePacket {
+    float px, py;
+    array<float, 50 * 2> cords;
+};
+#pragma pack(pop)
+
+
 int main()
 {
+    //-------------------
+    asio::io_context ioc;
+    asio::ip::udp::socket socket(ioc, asio::ip::udp::endpoint(asio::ip::udp::v4(), 56782));
+    socket.non_blocking(true);
+    vector<asio::ip::udp::endpoint> clients;
+    //-------------------
+
     srand(static_cast<unsigned int>(chrono::system_clock::now().time_since_epoch().count()));
     sf::Clock clock;
     sf::ContextSettings settings;
@@ -86,6 +102,33 @@ int main()
             }
         }
 
+        //----------------------
+        StatePacket pck;
+        pck.px = player.cor.x;
+        pck.py = player.cor.y;
+
+        for (int i = 1; i < 51; ++i) {
+            pck.cords[i*2 - 2] = bodies[i]->cor.x;
+            pck.cords[i*2 - 1] = bodies[i]->cor.y;
+        }
+
+        //---------------------
+
+        for (auto& cl : clients) {
+            socket.send_to(asio::buffer(&pck, sizeof(pck)), cl);
+        }
+        //-----------------------
+
+        char dummy[1];
+        asio::ip::udp::endpoint sender;
+        asio::error_code ec;
+        while (socket.receive_from(asio::buffer(dummy), sender, 0, ec) == 1) {
+            if (ec) break;
+            // Добавляем, если ещё нет в списке
+            if (std::find(clients.begin(), clients.end(), sender) == clients.end())
+                clients.push_back(sender);
+        }
+        //--------------------------
 
         cam.control();
         cam.draw_all();
