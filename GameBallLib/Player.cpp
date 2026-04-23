@@ -2,7 +2,8 @@
 
 //Keyboard keyboard;
 
-Player::Player(){
+Player::Player(int id){
+	this->id = id;
 	rad = 20;
 	body.setFillColor(Color::Green);
 	body.setPointCount(16);
@@ -23,6 +24,10 @@ Player::Player(){
 
 }
 
+int Player::getId() {
+	return id;
+}
+
 Vector2f Player::calc_acs(Vector2f vec) {
 	return (power*vec - kfr*toOneVec(vel) - toOneVec(vel) * kai * mod(vel) * mod(vel)) / mass;
 }
@@ -30,16 +35,28 @@ Vector2f Player::calc_acs(Vector2f vec) {
 void Player::control() {
 	Vector2f vec(0, 0);
 
-	if (keyboard.isKeyPressed(Keyboard::W)) {
+	//if (keyboard.isKeyPressed(Keyboard::W)) {
+	//	vec.y += 1;
+	//}
+	//if (keyboard.isKeyPressed(Keyboard::S)) {
+	//	vec.y -= 1;
+	//}
+	//if (keyboard.isKeyPressed(Keyboard::A)) {
+	//	vec.x -= 1;
+	//}
+	//if (keyboard.isKeyPressed(Keyboard::D)) {
+	//	vec.x += 1;
+	//}
+	if (pk.up) {
 		vec.y += 1;
 	}
-	if (keyboard.isKeyPressed(Keyboard::S)) {
+	if (pk.down) {
 		vec.y -= 1;
 	}
-	if (keyboard.isKeyPressed(Keyboard::A)) {
+	if (pk.left) {
 		vec.x -= 1;
 	}
-	if (keyboard.isKeyPressed(Keyboard::D)) {
+	if (pk.right) {
 		vec.x += 1;
 	}
 	vec = toOneVec(vec);

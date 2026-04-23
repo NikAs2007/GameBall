@@ -2,10 +2,14 @@
 
 #include "../GameBallLib/header.h"
 #include <array>
+#include <map>
 
 
 const int sizeofscreenx = 1800;
 const int sizeofscreeny = 700;
+
+static int globalID = 1;
+map<asio::ip::udp::endpoint, int> clientIdMap;
 
 #pragma pack(push, 1)
 struct StatePacket {
@@ -13,6 +17,13 @@ struct StatePacket {
     array<float, 50 * 2> cords;
     array<float, 51> rots;
     Menu menu;
+};
+#pragma pack(pop)
+
+#pragma pack(push, 1)
+struct InputPacket {
+    int id;
+    PlayerKeyboard pk;
 };
 #pragma pack(pop)
 
@@ -29,7 +40,7 @@ int main()
     srand(static_cast<unsigned int>(chrono::system_clock::now().time_since_epoch().count()));
     sf::Clock clock;
     sf::ContextSettings settings;
-    Player player;
+    Player player(1);
     vector<Enemy> enemy;
 
     for (int i = 0; i < 50; ++i) enemy.push_back(Enemy(&player));
@@ -104,6 +115,23 @@ int main()
             }
         }
 
+        //------------------------
+        InputPacket inp;
+        asio::ip::udp::endpoint sender;
+        asio::error_code ec;
+        while (socket.receive_from(asio::buffer(&inp, sizeof(inp)), sender, 0, ec) == sizeof(inp)) {
+            if (ec) break;
+            // Добавляем, если ещё нет в списке
+            if (std::find(clients.begin(), clients.end(), sender) == clients.end())
+                clients.push_back(sender);
+            if (clientIdMap.find(sender) == clientIdMap.end()) {
+                clientIdMap[sender] = globalID++;
+            }
+
+            player.pk = inp.pk;
+        }
+        //--------------------------
+
         //----------------------
         StatePacket pck;
         pck.px = player.cor.x;
@@ -117,23 +145,10 @@ int main()
             pck.rots[i] = bodies[i]->rotation;
         }
 
-        //---------------------
-
         for (auto& cl : clients) {
             socket.send_to(asio::buffer(&pck, sizeof(pck)), cl);
         }
-        //-----------------------
-
-        char dummy[1];
-        asio::ip::udp::endpoint sender;
-        asio::error_code ec;
-        while (socket.receive_from(asio::buffer(dummy), sender, 0, ec) == 1) {
-            if (ec) break;
-            // Добавляем, если ещё нет в списке
-            if (std::find(clients.begin(), clients.end(), sender) == clients.end())
-                clients.push_back(sender);
-        }
-        //--------------------------
+        //---------------------------
 
         cam.control();
         cam.draw_all();

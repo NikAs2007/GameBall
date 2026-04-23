@@ -15,20 +15,26 @@ struct StatePacket {
 };
 #pragma pack(pop)
 
+#pragma pack(push, 1)
+struct InputPacket {
+    int id;
+    PlayerKeyboard pk;
+};
+#pragma pack(pop)
+
 int main()
 {
     //----------------------------------------------
     asio::io_context io;
     asio::ip::udp::socket socket(io, asio::ip::udp::endpoint(asio::ip::udp::v4(), 0)); // любой свободный порт
+    socket.non_blocking(true);
     asio::ip::udp::endpoint server(asio::ip::make_address("127.0.0.1"), 56782);
-    // Отправляем приветствие для регистрации
-    socket.send_to(asio::buffer("H", 1), server);
     //----------------------------------------------
 
     srand(static_cast<unsigned int>(chrono::system_clock::now().time_since_epoch().count()));
     sf::Clock clock;
     sf::ContextSettings settings;
-    Player player;
+    Player player(1);
     vector<Enemy> enemy;
 
     for (int i = 0; i < 50; ++i) enemy.push_back(Enemy(&player));
@@ -60,6 +66,26 @@ int main()
         socket.non_blocking(true);
         asio::ip::udp::endpoint sender;
         asio::error_code ec;
+
+        // Отправляем приветствие для регистрации
+        InputPacket inp;
+        inp.id = 1;
+        if (keyboard.isKeyPressed(Keyboard::W)) {
+            inp.pk.up = true;
+        }
+        if (keyboard.isKeyPressed(Keyboard::S)) {
+            inp.pk.down = true;
+        }
+        if (keyboard.isKeyPressed(Keyboard::A)) {
+            inp.pk.left = true;
+        }
+        if (keyboard.isKeyPressed(Keyboard::D)) {
+            inp.pk.right = true;
+        }
+        socket.send_to(asio::buffer(&inp, sizeof(inp)), server);
+        //------------------------------------------
+
+        //Получаем
         size_t len = socket.receive_from(asio::buffer(&pck, sizeof(pck)), sender, 0, ec);
         if (!ec && len == sizeof(pck)) {
             // Обновляем позиции
@@ -73,7 +99,7 @@ int main()
                 bodies[i]->rotation = pck.rots[i];
             }
         }
-
+        //-------------------------------------
 
 
 

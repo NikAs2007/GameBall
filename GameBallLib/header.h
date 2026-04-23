@@ -25,6 +25,16 @@ float mod(Vector2f vec);
 float hiperbola(float x);
 Vector2f rotateVector(Vector2f vec, float angle);
 
+struct PlayerKeyboard {
+	bool up = false, down = false, right = false, left = false;
+
+	PlayerKeyboard() {};
+
+	PlayerKeyboard(PlayerKeyboard& pk) {
+		*this = pk;
+	}
+};
+
 struct Body {
 	CircleShape body;
 	float rad = 10;
@@ -39,13 +49,13 @@ struct Body {
 };
 
 class Player : public Body{
-	//CircleShape body;
 	Vector2f acs;
 	Vector2f vel;
 	float mass = 500;
 	float power = 2;
 	float kfr = 0.3;
 	float kai = 1.5;
+	int id = 0;
 
 	Text dtext;
 	static Font font;
@@ -53,11 +63,14 @@ class Player : public Body{
 	friend class Enemy;
 
 public:
-	Player();
+	PlayerKeyboard pk;
+
+	Player(int id);
 	Text getDebug();
 	Vector2f calc_acs(Vector2f vec);
 	void control();
 	CircleShape getBody();
+	int getId();
 };
 
 class Enemy : public Body {
