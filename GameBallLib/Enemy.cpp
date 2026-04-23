@@ -76,7 +76,8 @@ void Enemy::control() {
 
 	acs = calc_acs(vec);
 	vel += acs;
-	body.setRotation(atan2(-toOneVec(vec).x, toOneVec(vec).y)*180/3.1415f - 60);
+	rotation = atan2(-toOneVec(vec).x, toOneVec(vec).y) * 180 / 3.1415f - 60;
+	//body.setRotation(atan2(-toOneVec(vec).x, toOneVec(vec).y)*180/3.1415f - 60);
 	cor.x = cor.x + vel.x;
 	cor.y = cor.y + vel.y;
 

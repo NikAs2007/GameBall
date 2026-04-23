@@ -10,6 +10,8 @@ const int sizeofscreeny = 700;
 struct StatePacket {
     float px, py;
     array<float, 50 * 2> cords;
+    array<float, 51> rots;
+    Menu menu;
 };
 #pragma pack(pop)
 
@@ -63,9 +65,12 @@ int main()
             // Обновляем позиции
             bodies[0]->cor.x = pck.px;
             bodies[0]->cor.y = pck.py;
+            bodies[0]->rotation = pck.rots[0];
+            menu.stage = pck.menu.stage;
             for (int i = 1; i < 51; ++i) {
                 bodies[i]->cor.x = pck.cords[i * 2 - 2];
                 bodies[i]->cor.y = pck.cords[i * 2 - 1];
+                bodies[i]->rotation = pck.rots[i];
             }
         }
 
@@ -118,7 +123,7 @@ int main()
         //    }
         //}
 
-        menu.stage = menu.PLAY;
+        //menu.stage = m;
         cam.control();
         cam.draw_all();
 

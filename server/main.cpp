@@ -11,6 +11,8 @@ const int sizeofscreeny = 700;
 struct StatePacket {
     float px, py;
     array<float, 50 * 2> cords;
+    array<float, 51> rots;
+    Menu menu;
 };
 #pragma pack(pop)
 
@@ -106,10 +108,13 @@ int main()
         StatePacket pck;
         pck.px = player.cor.x;
         pck.py = player.cor.y;
+        pck.rots[0] = bodies[0]->rotation;
+        pck.menu = menu;
 
         for (int i = 1; i < 51; ++i) {
             pck.cords[i*2 - 2] = bodies[i]->cor.x;
             pck.cords[i*2 - 1] = bodies[i]->cor.y;
+            pck.rots[i] = bodies[i]->rotation;
         }
 
         //---------------------

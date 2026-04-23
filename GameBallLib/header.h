@@ -29,6 +29,7 @@ struct Body {
 	CircleShape body;
 	float rad = 10;
 	Vector2f cor;
+	float rotation;
 
 	//void setRad(float rad);
 	//CircleShape& getBody() {

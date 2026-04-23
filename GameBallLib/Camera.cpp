@@ -61,6 +61,7 @@ void Camera::draw_all() {
 			(*bodies)[i]->body.setPosition(((*bodies)[i]->cor.x - corKam.x) / k_size + (float)sizeofscreenx / 2, ((*bodies)[i]->cor.y - corKam.y) / k_size + (float)sizeofscreeny / 2);
 			(*bodies)[i]->body.setRadius((*bodies)[i]->rad / k_size);
 			(*bodies)[i]->body.setOrigin((*bodies)[i]->rad / k_size, (*bodies)[i]->rad / k_size);
+			(*bodies)[i]->body.setRotation((*bodies)[i]->rotation);
 
 			blinks.setUniform("cenx", (*bodies)[i]->body.getPosition().x);
 			blinks.setUniform("ceny", sizeofscreeny - (*bodies)[i]->body.getPosition().y);
