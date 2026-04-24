@@ -4,7 +4,15 @@ project(GameBall)
 set(SN "${PROJECT_NAME}server")
 set(CN "${PROJECT_NAME}client")
 
-set(SFML_DIR "${CMAKE_CURRENT_SOURCE_DIR}/libs/SFML-2.6.2_win/lib/cmake/SFML")
+if(WIN32)
+	set(SFML_DIR "${CMAKE_CURRENT_SOURCE_DIR}/libs/SFML-2.6.2_win/lib/cmake/SFML")
+endif()
+
+if(UNIX)
+	set(SFML_DIR "${CMAKE_CURRENT_SOURCE_DIR}/libs/SFML-2.6.2_lin/lib/cmake/SFML")
+endif()
+
+#set(SFML_DIR "${CMAKE_CURRENT_SOURCE_DIR}/libs/SFML-2.6.2_win/lib/cmake/SFML")
 find_package(SFML 2.6.2 COMPONENTS graphics window system REQUIRED)
 
 
