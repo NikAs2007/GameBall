@@ -9,6 +9,7 @@ out/
 *.out
 *.dll
 !CompleteBuild_v1/GameBallexe/*.dll
+!GameBallStart/*.dll
 
 .vs/
 .idea/
