@@ -16,7 +16,8 @@ struct StatePacket {
     float px, py;
     array<float, 50 * 2> cords;
     array<float, 51> rots;
-    Menu menu;
+    //Menu menu;
+    Menu::Stage stage;
 };
 #pragma pack(pop)
 
@@ -137,7 +138,7 @@ int main()
         pck.px = player.cor.x;
         pck.py = player.cor.y;
         pck.rots[0] = bodies[0]->rotation;
-        pck.menu = menu;
+        pck.stage = menu.stage;
 
         for (int i = 1; i < 51; ++i) {
             pck.cords[i*2 - 2] = bodies[i]->cor.x;

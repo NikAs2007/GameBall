@@ -2,6 +2,7 @@
 
 #include "../GameBallLib/header.h"
 #include <array>
+#include <fstream>
 
 const int sizeofscreenx = 1800;
 const int sizeofscreeny = 700;
@@ -11,7 +12,8 @@ struct StatePacket {
     float px, py;
     array<float, 50 * 2> cords;
     array<float, 51> rots;
-    Menu menu;
+    //Menu menu;
+    Menu::Stage stage;
 };
 #pragma pack(pop)
 
@@ -24,6 +26,15 @@ struct InputPacket {
 
 int main()
 {
+    //-----
+    std::ofstream debug("../debug/debug.txt");
+    debug << sizeof(InputPacket);
+    debug.close();
+
+
+    //------
+
+
     //----------------------------------------------
     asio::io_context io;
     asio::ip::udp::socket socket(io, asio::ip::udp::endpoint(asio::ip::udp::v4(), 0)); // любой свободный порт
@@ -92,7 +103,7 @@ int main()
             bodies[0]->cor.x = pck.px;
             bodies[0]->cor.y = pck.py;
             bodies[0]->rotation = pck.rots[0];
-            menu.stage = pck.menu.stage;
+            menu.stage = pck.stage;
             for (int i = 1; i < 51; ++i) {
                 bodies[i]->cor.x = pck.cords[i * 2 - 2];
                 bodies[i]->cor.y = pck.cords[i * 2 - 1];
