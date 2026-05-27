@@ -13,7 +13,7 @@ if(UNIX)
 endif()
 
 #set(SFML_DIR "${CMAKE_CURRENT_SOURCE_DIR}/libs/SFML-2.6.2_win/lib/cmake/SFML")
-find_package(SFML 2.6.2 COMPONENTS graphics window system REQUIRED)
+find_package(SFML COMPONENTS graphics window system REQUIRED)
 
 
 add_executable(${SN} server/main.cpp GameBallLib/Enemy.cpp GameBallLib/Player.cpp GameBallLib/Camera.cpp GameBallLib/Menu.cpp)

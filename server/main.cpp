@@ -1,8 +1,9 @@
-//server
+ï»¿//server
 
 #include "../GameBallLib/header.h"
 #include <array>
 #include <map>
+#include <fstream>
 
 
 const int sizeofscreenx = 1800;
@@ -122,7 +123,7 @@ int main()
         asio::error_code ec;
         while (socket.receive_from(asio::buffer(&inp, sizeof(inp)), sender, 0, ec) == sizeof(inp)) {
             if (ec) break;
-            // Äîáàâëÿåì, åñëè åù¸ íåò â ñïèñêå
+            // Ð”Ð¾Ð±Ð°Ð²Ð»ÑÐµÐ¼, ÐµÑÐ»Ð¸ ÐµÑ‰Ñ‘ Ð½ÐµÑ‚ Ð² ÑÐ¿Ð¸ÑÐºÐµ
             if (std::find(clients.begin(), clients.end(), sender) == clients.end())
                 clients.push_back(sender);
             if (clientIdMap.find(sender) == clientIdMap.end()) {
@@ -145,6 +146,12 @@ int main()
             pck.cords[i*2 - 1] = bodies[i]->cor.y;
             pck.rots[i] = bodies[i]->rotation;
         }
+
+        //-----
+        //std::ofstream debug("../debug/debug.txt");
+        //debug << clients.size() << '\n';
+        //debug.close();
+        //------
 
         for (auto& cl : clients) {
             socket.send_to(asio::buffer(&pck, sizeof(pck)), cl);
@@ -187,7 +194,7 @@ Vector2f rotateVector(Vector2f vec, float ang) {
     float sin_a = std::sin(angle);
 
     if (ang < 0) {
-        sin_a = -sin_a;  // ìåíÿåì çíàê ñèíóñà äëÿ ïîâîðîòà â äðóãóþ ñòîðîíó
+        sin_a = -sin_a;  // Ð¼ÐµÐ½ÑÐµÐ¼ Ð·Ð½Ð°Ðº ÑÐ¸Ð½ÑƒÑÐ° Ð´Ð»Ñ Ð¿Ð¾Ð²Ð¾Ñ€Ð¾Ñ‚Ð° Ð² Ð´Ñ€ÑƒÐ³ÑƒÑŽ ÑÑ‚Ð¾Ñ€Ð¾Ð½Ñƒ
     }
 
     Vector2f ans = Vector2f(

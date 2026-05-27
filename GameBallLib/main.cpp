@@ -1,4 +1,4 @@
-#include "header.h"
+п»ї#include "header.h"
 
 const int sizeofscreenx = 1800;
 const int sizeofscreeny = 700;
@@ -122,7 +122,7 @@ Vector2f rotateVector(Vector2f vec, float ang) {
     float sin_a = std::sin(angle);
 
     if (ang < 0) {
-        sin_a = -sin_a;  // меняем знак синуса для поворота в другую сторону
+        sin_a = -sin_a;  // РјРµРЅСЏРµРј Р·РЅР°Рє СЃРёРЅСѓСЃР° РґР»СЏ РїРѕРІРѕСЂРѕС‚Р° РІ РґСЂСѓРіСѓСЋ СЃС‚РѕСЂРѕРЅСѓ
     }
 
     Vector2f ans = Vector2f(

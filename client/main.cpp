@@ -1,4 +1,4 @@
-//client
+ï»¿//client
 
 #include "../GameBallLib/header.h"
 #include <array>
@@ -27,17 +27,15 @@ struct InputPacket {
 int main()
 {
     //-----
-    std::ofstream debug("../debug/debug.txt");
-    debug << sizeof(InputPacket);
-    debug.close();
-
-
+    //std::ofstream debug("../debug/debug.txt");
+    //debug << sizeof(InputPacket);
+    //debug.close();
     //------
 
 
     //----------------------------------------------
     asio::io_context io;
-    asio::ip::udp::socket socket(io, asio::ip::udp::endpoint(asio::ip::udp::v4(), 0)); // ëþáîé ñâîáîäíûé ïîðò
+    asio::ip::udp::socket socket(io, asio::ip::udp::endpoint(asio::ip::udp::v4(), 0)); // Ð»ÑŽÐ±Ð¾Ð¹ ÑÐ²Ð¾Ð±Ð¾Ð´Ð½Ñ‹Ð¹ Ð¿Ð¾Ñ€Ñ‚
     socket.non_blocking(true);
     asio::ip::udp::endpoint server(asio::ip::make_address("127.0.0.1"), 56782);
     //----------------------------------------------
@@ -78,7 +76,7 @@ int main()
         asio::ip::udp::endpoint sender;
         asio::error_code ec;
 
-        // Îòïðàâëÿåì ïðèâåòñòâèå äëÿ ðåãèñòðàöèè
+        // ÐžÑ‚Ð¿Ñ€Ð°Ð²Ð»ÑÐµÐ¼ Ð¿Ñ€Ð¸Ð²ÐµÑ‚ÑÑ‚Ð²Ð¸Ðµ Ð´Ð»Ñ Ñ€ÐµÐ³Ð¸ÑÑ‚Ñ€Ð°Ñ†Ð¸Ð¸
         InputPacket inp;
         inp.id = 1;
         if (keyboard.isKeyPressed(Keyboard::W)) {
@@ -96,10 +94,10 @@ int main()
         socket.send_to(asio::buffer(&inp, sizeof(inp)), server);
         //------------------------------------------
 
-        //Ïîëó÷àåì
+        //ÐŸÐ¾Ð»ÑƒÑ‡Ð°ÐµÐ¼
         size_t len = socket.receive_from(asio::buffer(&pck, sizeof(pck)), sender, 0, ec);
         if (!ec && len == sizeof(pck)) {
-            // Îáíîâëÿåì ïîçèöèè
+            // ÐžÐ±Ð½Ð¾Ð²Ð»ÑÐµÐ¼ Ð¿Ð¾Ð·Ð¸Ñ†Ð¸Ð¸
             bodies[0]->cor.x = pck.px;
             bodies[0]->cor.y = pck.py;
             bodies[0]->rotation = pck.rots[0];
@@ -197,7 +195,7 @@ Vector2f rotateVector(Vector2f vec, float ang) {
     float sin_a = std::sin(angle);
 
     if (ang < 0) {
-        sin_a = -sin_a;  // ìåíÿåì çíàê ñèíóñà äëÿ ïîâîðîòà â äðóãóþ ñòîðîíó
+        sin_a = -sin_a;  // Ð¼ÐµÐ½ÑÐµÐ¼ Ð·Ð½Ð°Ðº ÑÐ¸Ð½ÑƒÑÐ° Ð´Ð»Ñ Ð¿Ð¾Ð²Ð¾Ñ€Ð¾Ñ‚Ð° Ð² Ð´Ñ€ÑƒÐ³ÑƒÑŽ ÑÑ‚Ð¾Ñ€Ð¾Ð½Ñƒ
     }
 
     Vector2f ans = Vector2f(
